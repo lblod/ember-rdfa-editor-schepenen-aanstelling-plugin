@@ -1,7 +1,7 @@
-ember-rdfa-editor-schepenen-aanstelling-plugin
+@lblod/ember-rdfa-editor-schepenen-aanstelling-plugin
 ==============================================================================
 
-[Short description of the addon.]
+Plugin responsible for managing schepenen during installation
 
 Installation
 ------------------------------------------------------------------------------
@@ -13,9 +13,11 @@ ember install ember-rdfa-editor-schepenen-aanstelling-plugin
 
 Usage
 ------------------------------------------------------------------------------
-
-[Longer description of how to use the addon in apps.]
-
+Add
+```
+<span property="ext:schepenenAanstellingPluginText">voeg lijst met schepenen toe.</span>
+```
+A card will show up. When save RDFA output in document.
 
 Contributing
 ------------------------------------------------------------------------------
@@ -23,7 +25,7 @@ Contributing
 ### Installation
 
 * `git clone <repository-url>`
-* `cd ember-rdfa-editor-schepenen-aanstelling-plugin`
+* `cd ember-rdfa-editor-fractievorming-plugin`
 * `npm install`
 
 ### Linting
