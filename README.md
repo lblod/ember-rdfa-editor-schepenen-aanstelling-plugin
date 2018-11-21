@@ -15,7 +15,7 @@ Usage
 ------------------------------------------------------------------------------
 Add
 ```
-<span property="ext:schepenenAanstellingPluginText">voeg lijst met schepenen toe.</span>
+<span property="ext:schepenenAanstellingText">voeg lijst met schepenen toe.</span>
 ```
 A card will show up. When save RDFA output in document.
 
