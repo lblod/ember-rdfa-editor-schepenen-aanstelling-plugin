@@ -1,0 +1,15 @@
+<td><strong>{{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}} {{mandataris.isBestuurlijkeAliasVan.achternaam}}</strong></td>
+<td>
+  {{mandataris.bekleedt.bestuursfunctie.label}}
+</td>
+<td>
+  {{editor-plugins/fractievorming-datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.begin)}}
+</td>
+<td>
+  {{editor-plugins/fractievorming-datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.einde)}}
+</td>
+<td>
+  {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "remove")}}
+    <i class="vi vi-cross vi-u-s"></i>Verwijder mandataris
+  {{/wu-link-button}}
+</td>

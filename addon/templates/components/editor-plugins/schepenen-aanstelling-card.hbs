@@ -1,10 +1,83 @@
-<p class="u-spacer--tiny">{{info.label}} <br>
-  <strong>{{info.plainValue}}</strong>
-</p>
+<div class="modal-dialog__header">
+  <div class="grid">
+    <div class="col--10-12">
+      {{#if loadData.isRunning}}
+        <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+      {{else}}
+        {{#if mandatarissen}}
+          <p class="u-spacer--tiny">
+            Wil u graag de tabel beheren voor de <strong> schepenen</strong>?
+          </p>
+        {{else}}
+          <p class="u-spacer--tiny"><strong>Gelieve eerst het agendapunt "Installatie gemeenteraadsleden en eedaflegging" te voltooien</strong> voor u aan de fractievorming start.</p>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>
 
-{{#wu-button-group}}
-  {{wu-button label="Juist" size="small" isNarrow=true command="ctrl + j" commandLocation="below" onClick=(action "insert")}}
-  {{wu-button label="Negeer" size="tiny" isLink=true isDark=true isNarrow=true command="esc" commandLocation="below" onClick=null}}
-{{/wu-button-group}}
+{{#if mandatarissen}}
+  <div class="modal-dialog__footer">
+    {{#if loadData.isRunning}}
+      <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+    {{else}}
+      {{#wu-button-group}}
+        {{#if bestuursorgaan}}
+          {{#if info.node}}
+            {{wu-button
+              label="Bewerk tabel"
+              isNarrow=true
+              onClick=(action "togglePopup")
+            }}
+          {{else}}
+            {{wu-button
+              label="Ga naar tabel"
+              isNarrow=true
+              onClick=(action "togglePopup")
+            }}
+          {{/if}}
+        {{/if}}
+      {{/wu-button-group}}
+    {{/if}}
+  </div>
+{{/if}}
 
-{{yield}}
+{{# if popup}}
+  {{#wu-modal
+     title="Beheer de aanstelling van de schepenen"
+     dialog-class="modal-dialog--wide modal-dialog--sectioned"
+     dialog-content-class="modal-dialog__content--sectioned"
+     onClose=(action 'togglePopup')
+     as |m|}}
+    <div class="u-spacer--bottom--tiny">
+      <div class="grid grid--collapse">
+        {{#if tableReset.isRunning}}
+          <div class="col--12-12">
+            <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+          </div>
+        {{else}}
+          <div class="col--4-12">
+            {{#wu-link-button class="button--small button--link u-spacer--left--tiny" isNarrow=true onClick=(action "resetTable")}}
+              <i class="fa fa-rotate-right"></i>Importeer gemeenteraadsleden opnieuw uit vorige agendapunten
+            {{/wu-link-button}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{#m.content isSectioned=true}}
+      {{schepenen-aanstelling/aanstelling-container
+        mandatarissen=mandatarissen
+        bestuursorgaan=bestuursorgaan
+        bestuurseenheid=bestuurseenheid
+      }}
+      {{schepenen-aanstelling/output-rdfa id=outputId class="u-hidden" mandatarissen=mandatarissen}}
+    {{/m.content}}
+    <div class="modal-dialog__footer">
+      {{#wu-button-group}}
+        {{wu-button label="Voeg tabel in" class="button button--narrow" onClick=(action 'insert')}}
+        {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
+      {{/wu-button-group}}
+    </div>
+  {{/wu-modal}}
+{{/if}}
