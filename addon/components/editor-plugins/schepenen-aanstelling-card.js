@@ -88,7 +88,7 @@ export default Component.extend(SerializationHelper, {
   },
 
   async loadDataEditMode(){
-    let table = this.getMandatarisTableNode();
+    let table = this.info.domNodeToUpdate;
     if(!table)
       return;
 
