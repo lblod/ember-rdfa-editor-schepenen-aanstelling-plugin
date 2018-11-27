@@ -1,12 +1,13 @@
+<td>{{schepenen-aanstelling/rangorde-selector mandataris=mandataris}}</td>
 <td><strong>{{mandataris.isBestuurlijkeAliasVan.gebruikteVoornaam}} {{mandataris.isBestuurlijkeAliasVan.achternaam}}</strong></td>
 <td>
   {{mandataris.bekleedt.bestuursfunctie.label}}
 </td>
 <td>
-  {{editor-plugins/fractievorming-datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.begin)}}
+  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.begin)}}
 </td>
 <td>
-  {{editor-plugins/fractievorming-datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.einde)}}
+  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.einde)}}
 </td>
 <td>
   {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "remove")}}

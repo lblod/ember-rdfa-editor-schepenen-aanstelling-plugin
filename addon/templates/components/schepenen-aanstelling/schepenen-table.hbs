@@ -1,7 +1,26 @@
 <table class="data-table data-table--lined data-table--zebra">
   <thead>
     <tr>
-      <th>Voornaam &amp; Familienaam</th>
+      <th>
+        {{#wu-link-button class="button--small button--link u-spacer--left--tiny" isNarrow=true onClick=(action "sortRangorde")}}
+          {{#if rangordeAsc }}
+            <i class="fa fa-arrow-up"></i>
+          {{else}}
+            <i class="fa fa-arrow-down"></i>
+          {{/if}}
+          Rangorde
+        {{/wu-link-button}}
+      </th>
+      <th>
+        {{#wu-link-button class="button--small button--link u-spacer--left--tiny" isNarrow=true onClick=(action "sortNaam")}}
+          {{#if naamAsc }}
+            <i class="fa fa-arrow-up"></i>
+          {{else}}
+            <i class="fa fa-arrow-down"></i>
+          {{/if}}
+          Voornaam &amp; Familienaam
+        {{/wu-link-button}}
+      </th>
       <th>Mandaat</th>
       <th>Begin</th>
       <th>Einde</th>
@@ -27,7 +46,7 @@
           <td>
             <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
           </td>
-          <td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td><td></td>
         </tr>
       {{else}}
         {{schepenen-aanstelling/add-new-schepen

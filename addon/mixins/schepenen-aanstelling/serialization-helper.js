@@ -26,6 +26,8 @@ export default Mixin.create({
     //   'sort': '-binding-start'
     // };
     // let college = (await this.query('bestuursorgaan', query)).firstObject;
+
+    //take mandaat schepen from latest bestuursorgaan in tijd
     let query = {
       'filter[bevat-in][is-tijdsspecialisatie-van][bestuurseenheid][:uri:]': this.bestuurseenheid.uri,
       'filter[bevat-in][is-tijdsspecialisatie-van][classificatie][:uri:]': this.collegeClassificatieUri,
@@ -42,22 +44,51 @@ export default Mixin.create({
     return Array.concat(...contexts);
   },
 
-  async instantiateMandatarissen(triples){
+  async instantiateSchepenen(triples){
     await this.setMandaatSchepen();
     const resources = triples.filter((t) => t.predicate === 'a');
     const mandatarissen = A();
     for (let resource of resources) {
       if(!this.isResourceNewMandataris(resource, triples, mandatarissen))
         continue;
-      mandatarissen.pushObject(await this.buildMandatarisFromTriples(triples.filter((t) => t.subject === resource.subject)));
+      mandatarissen.pushObject(await this.loadSchepenFromTriples(triples.filter((t) => t.subject === resource.subject)));
+    }
+    return mandatarissen;
+   },
+
+  async instantiateNewSchepenen(triples){
+    await this.setMandaatSchepen();
+    const persons = triples.filter(t => t.predicate === 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan').map(t => t.object);
+    let personUris = Array.from(new Set(persons));
+    const mandatarissen = A();
+    for (let personUri of personUris) {
+      mandatarissen.pushObject(await this.initNewSchepen(personUri));
     }
     return mandatarissen;
   },
 
-  async buildMandatarisFromTriples(triples) {
+  async initNewSchepen(persoonURI) {
+    const mandataris = MandatarisToCreate.create({});
+    mandataris.set('bekleedt', this.schepenMandaat);
+    mandataris.set('rangorde', '');
+    const persoon = await this.store.query('persoon',
+                                           {
+                                             filter: {
+                                               ':uri:': persoonURI,
+                                               'is-kandidaat-voor': { 'rechtstreekse-verkiezing': {'stelt-samen': {':uri:': this.bestuursorgaan.uri}}}
+                                             },
+                                             include: 'is-kandidaat-voor'
+                                           });
+    mandataris.set('isBestuurlijkeAliasVan', persoon.get('firstObject'));
+    return mandataris;
+  },
+
+  async loadSchepenFromTriples(triples){
     const mandataris = MandatarisToCreate.create({ uri: triples[0].subject});
     mandataris.set('bekleedt', this.schepenMandaat);
+    mandataris.set('rangorde', (triples.find(t => t.predicate === mandataris.rdfaBindings.rangorde) || {}).object || '');
     const persoonURI = triples.find((t) => t.predicate === mandataris.rdfaBindings.isBestuurlijkeAliasVan);
+
     if (persoonURI) {
       const persoon = await this.store.query('persoon',
                                              {

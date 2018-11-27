@@ -1,4 +1,12 @@
 import EmberObject from '@ember/object';
+import uuid from 'uuid/v4';
+
+const rangordeValues = [
+  'Eerste schepen', 'Tweede schepen', 'Derde schepen',
+  'Vierde schepen', 'Vijfde schepen', 'Zesde schepen',
+  'Zevende schepen', 'Achtste schepen', 'Negende schepen', 'Tiende schepen'];
+export { rangordeValues }
+
 export default EmberObject.extend({
   uri: null,
   rangorde: 0,
@@ -17,5 +25,11 @@ export default EmberObject.extend({
     bekleedt: "http://www.w3.org/ns/org#holds",
     isBestuurlijkeAliasVan: "http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan",
     heeftLidmaatschap: "http://www.w3.org/ns/org#hasMembership"
+  },
+
+  init() {
+    this._super(...arguments);
+    if (! this.uri)
+      this.set('uri', `http://data.lblod.info/id/mandatarissen/${uuid()}`);
   }
 });

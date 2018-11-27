@@ -83,7 +83,20 @@ export default Component.extend(SerializationHelper, {
     if(triples.length == 0)
       return;
 
-    let mandatarissen = await this.instantiateMandatarissen(triples);
+    let mandatarissen = await this.instantiateNewSchepenen(triples);
+    this.set('mandatarissen', mandatarissen);
+  },
+
+  async loadDataEditMode(){
+    let table = this.getMandatarisTableNode();
+    if(!table)
+      return;
+
+    let triples = this.serializeTableToTriples(table);
+    if(triples.length == 0)
+      return;
+    
+    let mandatarissen = await this.instantiateSchepenen(triples);
     this.set('mandatarissen', mandatarissen);
   },
 

@@ -1,1 +1,8 @@
-{{yield}}
+{{#power-select
+   options=options
+   selected=mandataris.rangorde
+   onchange=(action "select")
+   renderInPlace=true
+   as |name|}}
+  {{name}}
+{{/power-select}}
