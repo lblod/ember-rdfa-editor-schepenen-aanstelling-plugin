@@ -39,24 +39,13 @@
     </tr>
   </thead>
   <tbody>
-
     {{#if addMandatarisMode}}
-      {{#if getUpToDateMandatarissen.isRunning}}
-        <tr>
-          <td>
-            <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
-          </td>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-      {{else}}
         {{schepenen-aanstelling/add-new-schepen
           onCancel=(action "cancelAddMandataris")
           onSave=(action "saveAddMandataris")
+          schepenMandaat=schepenMandaat
           bestuursorgaan=bestuursorgaan
-          bestuurseenheid=bestuurseenheid
-          mandatarissen=upToDateMandatarissen
         }}
-      {{/if}}
     {{/if}}
 
     {{#each sortedMandatarissen as |mandataris|}}

@@ -16,6 +16,7 @@ export default Model.extend({
   isAangesteldAls: hasMany('mandataris', { inverse: 'isBestuurlijkeAliasVan' }),
   isKandidaatVoor: hasMany('kandidatenlijst', { inverse: 'kandidaten' }),
   verkiezingsresultaten: hasMany('verkiezingsresultaat', { inverse: null}),
+  geboorte: belongsTo('geboorte', { inverse: null }),
 
   rdfaBindings: { // eslint-disable-line ember/avoid-leaking-state-in-ember-objects
     class: "http://www.w3.org/ns/person#Person",
