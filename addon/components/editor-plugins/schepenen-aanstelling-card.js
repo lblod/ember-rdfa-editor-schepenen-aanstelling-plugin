@@ -95,7 +95,7 @@ export default Component.extend(SerializationHelper, {
     let triples = this.serializeTableToTriples(table);
     if(triples.length == 0)
       return;
-    
+
     let mandatarissen = await this.instantiateSchepenen(triples);
     this.set('mandatarissen', mandatarissen);
   },
@@ -109,6 +109,12 @@ export default Component.extend(SerializationHelper, {
   createWrappingHTML(innerHTML){
     return `<div property="ext:schepenenAanstellingTable">${innerHTML}</div>`;
   },
+
+  tableReset: task(function *(){
+     yield this.setProperties();
+     yield this.loadDataInitialMode();
+  }),
+
 
   actions: {
     resetTable(){
