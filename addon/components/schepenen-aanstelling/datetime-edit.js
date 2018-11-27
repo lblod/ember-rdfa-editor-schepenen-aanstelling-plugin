@@ -37,6 +37,8 @@ export default Component.extend({
   }),
 
   setDatetime(date, hours, minutes){
+    if(!date)
+      return this.set('datetimeStr', '');
     return this.set('datetimeStr', moment(date).hours(hours || 0).minutes(minutes || 0).toISOString());
   },
 

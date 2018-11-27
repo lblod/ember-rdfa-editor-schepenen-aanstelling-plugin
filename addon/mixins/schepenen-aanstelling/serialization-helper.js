@@ -87,6 +87,8 @@ export default Mixin.create({
     const mandataris = MandatarisToCreate.create({ uri: triples[0].subject});
     mandataris.set('bekleedt', this.schepenMandaat);
     mandataris.set('rangorde', (triples.find(t => t.predicate === mandataris.rdfaBindings.rangorde) || {}).object || '');
+    mandataris.set('start', ((triples.find(t => t.predicate === mandataris.rdfaBindings.start)) || {}).object);
+    mandataris.set('einde', ((triples.find(t => t.predicate === mandataris.rdfaBindings.einde)) || {}).object);
     const persoonURI = triples.find((t) => t.predicate === mandataris.rdfaBindings.isBestuurlijkeAliasVan);
 
     if (persoonURI) {

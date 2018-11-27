@@ -4,10 +4,10 @@
   {{mandataris.bekleedt.bestuursfunctie.label}}
 </td>
 <td>
-  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.begin)}}
+  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.start)}}
 </td>
 <td>
-  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.heeftLidmaatschap.lidGedurende.einde)}}
+  {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.einde)}}
 </td>
 <td>
   {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "remove")}}

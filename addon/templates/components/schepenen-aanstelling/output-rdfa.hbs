@@ -1,1 +1,44 @@
-{{yield}}
+<table class="data-table data-table--lined data-table--zebra data-table--tight">
+  <thead>
+    <tr>
+      <th>Rangorde</th>
+      <th>Voornaam &amp; Familienaam</th>
+      <th>Mandaat</th>
+      <th>Start</th>
+      <th>Einde</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each sortedMandatarissen as |mandataris|}}
+      <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
+        <td>
+          <span property="mandaat:rangorde" content="{{mandataris.rangorde}}">
+            {{mandataris.rangorde}}
+          </span>
+        </td>
+        <td>
+          {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
+            {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
+          {{/rdfa/ctx-linked-resource}}
+        </td>
+        <td>
+          {{#rdfa/ctx-linked-resource resource=mandataris p="bekleedt" as |model mandaat|}}
+            <span property="org:role" resource="{{model.bestuursfunctie.uri}}">
+              <span property="skos:prefLabel">{{model.bestuursfunctie.label}}</span>
+            </span>
+          {{/rdfa/ctx-linked-resource}}
+        </td>
+        <td>
+          <span property="mandaat:start" datatype="xsd:date" content={{moment-format mandataris.start 'YYYY-MM-DD'}}>
+            {{moment-format mandataris.start 'YYYY-MM-DD'}}
+          </span>
+        </td>
+        <td>
+          <span property="mandaat:einde" datatype="xsd:date" content={{moment-format mandataris.einde 'YYYY-MM-DD'}}>
+            {{moment-format mandataris.einde 'YYYY-MM-DD'}}
+          </span>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

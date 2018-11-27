@@ -88,7 +88,7 @@ export default Component.extend(SerializationHelper, {
   },
 
   async loadDataEditMode(){
-    let table = this.info.domNodeToUpdate;
+    let table = document.querySelectorAll('[property="ext:schepenenAanstellingTable"]')[0];
     if(!table)
       return;
 
@@ -109,7 +109,7 @@ export default Component.extend(SerializationHelper, {
   createWrappingHTML(innerHTML){
     //adds timestamp to trigger diff
     return `<div property="ext:schepenenAanstellingTable">
-             ${new Date().toISOString()}
+             <span class="u-hidden">${new Date().toISOString()}</span>
              ${innerHTML}
             </div>`;
   },
