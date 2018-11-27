@@ -107,7 +107,11 @@ export default Component.extend(SerializationHelper, {
   },
 
   createWrappingHTML(innerHTML){
-    return `<div property="ext:schepenenAanstellingTable">${innerHTML}</div>`;
+    //adds timestamp to trigger diff
+    return `<div property="ext:schepenenAanstellingTable">
+             ${new Date().toISOString()}
+             ${innerHTML}
+            </div>`;
   },
 
   tableReset: task(function *(){
