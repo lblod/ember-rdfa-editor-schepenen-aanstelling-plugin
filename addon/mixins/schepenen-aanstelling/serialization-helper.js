@@ -22,6 +22,10 @@ export default Mixin.create({
                                                   { 'filter[:uri:]': this.bestuursorgaanUri }
                                                 )).firstObject;
     this.set('bestuursorgaan', bestuursorgaan);
+
+    await this.setMandaatSchepen();
+    await this.setCachedPersonen();
+    await this.setMandatarisStatusCodes();
   },
 
   getMandatarisTableNode(){
@@ -111,9 +115,6 @@ export default Mixin.create({
 
   async instantiateSchepenen(triples){
     await this.setProperties();
-    await this.setMandatarisStatusCodes();
-    await this.setMandaatSchepen();
-    await this.setCachedPersonen();
     const resources = triples.filter((t) => t.predicate === 'a');
     const mandatarissen = A();
     for (let resource of resources) {
@@ -125,10 +126,7 @@ export default Mixin.create({
    },
 
   async instantiateNewSchepenen(triples){
-    await this.setMandaatSchepen();
-    await this.setMandatarisStatusCodes();
-    await this.setMandaatSchepen();
-    await this.setCachedPersonen();
+    await this.setProperties();
     const persons = triples.filter(t => t.predicate === 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan').map(t => t.object);
     let personUris = Array.from(new Set(persons));
     const mandatarissen = A();
