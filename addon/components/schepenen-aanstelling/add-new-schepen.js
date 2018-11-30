@@ -10,7 +10,7 @@ export default Component.extend({
     mandataris.set('bekleedt', this.schepenMandaat);
     mandataris.set('rangorde', '');
     mandataris.set('isBestuurlijkeAliasVan', persoon);
-
+    mandataris.set('status', {label: '', uri: ''});
     this.set('selectedMandataris', mandataris);
   },
 
