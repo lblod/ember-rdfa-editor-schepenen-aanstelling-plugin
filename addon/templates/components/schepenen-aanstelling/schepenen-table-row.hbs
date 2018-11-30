@@ -10,6 +10,9 @@
   {{schepenen-aanstelling/datetime-edit datetimeStr=(mut mandataris.einde)}}
 </td>
 <td>
+  {{schepenen-aanstelling/status-selector options=mandatarisStatusCodes mandataris=mandataris}}
+</td>
+<td>
   {{#wu-link-button class="button--alt button--small" isNarrow=true onClick=(action "remove")}}
     <i class="vi vi-cross vi-u-s"></i>Verwijder mandataris
   {{/wu-link-button}}

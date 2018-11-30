@@ -10,6 +10,11 @@ export default Component.extend(SerializationHelper, {
   rangordeAsc: true,
   naamAsc: true,
 
+  setMandatarisStatusCodes: task(function* () {
+    let codes = yield this.store.findAll('mandataris-status-code');
+    this.set('mandatarisStatusCodes', codes);
+  }),
+
   rangordeSort(a,b){
     //without rangorde put them down
     if(rangordeValues.indexOf(a.rangorde.trim()) == -1){
@@ -51,6 +56,7 @@ export default Component.extend(SerializationHelper, {
   didReceiveAttrs() {
     this._super(...arguments);
     if(this.mandatarissen)
+      this.setMandatarisStatusCodes.perform();
       this.sortMandatarissen('naam', this.naamAsc);
   },
 

@@ -24,7 +24,8 @@ export default EmberObject.extend({
     einde: "http://data.vlaanderen.be/ns/mandaat#einde",
     bekleedt: "http://www.w3.org/ns/org#holds",
     isBestuurlijkeAliasVan: "http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan",
-    heeftLidmaatschap: "http://www.w3.org/ns/org#hasMembership"
+    heeftLidmaatschap: "http://www.w3.org/ns/org#hasMembership",
+    status: "http://data.vlaanderen.be/ns/mandaat#status"
   },
 
   init() {
