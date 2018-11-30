@@ -1,0 +1,12 @@
+{{#if options}}
+  {{#power-select
+     options=options
+     selected=mandataris.status
+     onchange=(action "select")
+     renderInPlace=true
+     as |status|}}
+    {{status.label}}
+  {{/power-select}}
+{{else}}
+  Aan het laden...
+{{/if}}
