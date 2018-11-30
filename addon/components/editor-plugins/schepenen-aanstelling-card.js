@@ -55,18 +55,6 @@ export default Component.extend(SerializationHelper, {
   rdfaEditorSchepenenAanstellingPlugin: service(),
   bestuursorgaanUri: reads('rdfaEditorSchepenenAanstellingPlugin.bestuursorgaanUri'),
 
-  async setProperties() {
-    let bestuurseenheid = ( await this.store.query('bestuurseenheid',
-                                           { 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri }
-                                                 )).firstObject;
-    this.set('bestuurseenheid', bestuurseenheid);
-
-    let bestuursorgaan = (await this.store.query('bestuursorgaan',
-                                                  { 'filter[:uri:]': this.bestuursorgaanUri }
-                                                )).firstObject;
-    this.set('bestuursorgaan', bestuursorgaan);
-  },
-
  loadData: task(function *(){
     yield this.setProperties();
     if(this.info.editMode)

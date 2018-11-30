@@ -10,11 +10,76 @@ export default Mixin.create({
   oudMandaatPredicate: 'http://mu.semte.ch/vocabularies/ext/oudMandaat',
   schepenClassificatieUri: 'http://data.vlaanderen.be/id/concept/BestuursfunctieCode/5ab0e9b8a3b2ca7c5e000014',
   collegeClassificatieUri: 'http://data.vlaanderen.be/id/concept/BestuursorgaanClassificatieCode/5ab0e9b8a3b2ca7c5e000006',
+  verkozenGevolgUri: 'http://data.vlaanderen.be/id/concept/VerkiezingsresultaatGevolgCode/89498d89-6c68-4273-9609-b9c097727a0f',
+
+  async setProperties() {
+    let bestuurseenheid = ( await this.store.query('bestuurseenheid',
+                                           { 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri }
+                                                 )).firstObject;
+    this.set('bestuurseenheid', bestuurseenheid);
+
+    let bestuursorgaan = (await this.store.query('bestuursorgaan',
+                                                  { 'filter[:uri:]': this.bestuursorgaanUri }
+                                                )).firstObject;
+    this.set('bestuursorgaan', bestuursorgaan);
+  },
 
   getMandatarisTableNode(){
     return  document.querySelectorAll("[property='ext:mandatarisTabelInput']")[0]
       ||  document.querySelectorAll(`[property='${this.expandedExt}/mandatarisTabelInput']`)[0];
   },
+
+  async setMandatarisStatusCodes(){
+    let codes = await this.store.findAll('mandataris-status-code');
+    this.set('mandatarisStatusCodes', codes);
+  },
+
+  async setCachedPersonen(){
+    //a subset of peronen of interest
+    let personen = await this.store.query('persoon',
+                     {
+                       filter: {
+                         'is-kandidaat-voor': {
+                           'rechtstreekse-verkiezing': {
+                             'stelt-samen': {
+                               ':uri:': this.bestuursorgaan.uri
+                             }
+                           }
+                         },
+                         'verkiezingsresultaten': {
+                           'gevolg': {
+                             ':uri:': this.verkozenGevolgUri
+                           },
+                           'is-resultaat-voor': {
+                             'rechtstreekse-verkiezing': {
+                               'stelt-samen': {
+                                 ':uri:': this.bestuursorgaan.uri
+                               }
+                             }
+                           }
+                         }
+                       },
+                       include: 'geboorte',
+                       page: { size: 1000 },
+                       sort:'gebruikte-voornaam'
+                     });
+    this.set('cachedPersonen', personen.toArray() || A());
+  },
+
+  async smartFetchPersoon(subjectUri){
+    let persoon = this.cachedPersonen.find(p => p.uri == subjectUri);
+    if(persoon)
+      return persoon;
+    //if not existant try to create it on based on information in triples
+
+    persoon = (await this.store.query('persoon', { 'filter[:uri:]': subjectUri })).firstObject;
+    if(!persoon)
+      return null;
+
+   //set cache so it may be found later
+   this.cachedPersonen.pushObject(persoon);
+   return persoon;
+},
 
   async setMandaatSchepen(){
     if(this.schepenMandaat)
@@ -45,7 +110,10 @@ export default Mixin.create({
   },
 
   async instantiateSchepenen(triples){
+    await this.setProperties();
+    await this.setMandatarisStatusCodes();
     await this.setMandaatSchepen();
+    await this.setCachedPersonen();
     const resources = triples.filter((t) => t.predicate === 'a');
     const mandatarissen = A();
     for (let resource of resources) {
@@ -58,6 +126,9 @@ export default Mixin.create({
 
   async instantiateNewSchepenen(triples){
     await this.setMandaatSchepen();
+    await this.setMandatarisStatusCodes();
+    await this.setMandaatSchepen();
+    await this.setCachedPersonen();
     const persons = triples.filter(t => t.predicate === 'http://data.vlaanderen.be/ns/mandaat#isBestuurlijkeAliasVan').map(t => t.object);
     let personUris = Array.from(new Set(persons));
     const mandatarissen = A();
@@ -71,15 +142,8 @@ export default Mixin.create({
     const mandataris = MandatarisToCreate.create({});
     mandataris.set('bekleedt', this.schepenMandaat);
     mandataris.set('rangorde', '');
-    const persoon = await this.store.query('persoon',
-                                           {
-                                             filter: {
-                                               ':uri:': persoonURI,
-                                               'is-kandidaat-voor': { 'rechtstreekse-verkiezing': {'stelt-samen': {':uri:': this.bestuursorgaan.uri}}}
-                                             },
-                                             include: 'is-kandidaat-voor'
-                                           });
-    mandataris.set('isBestuurlijkeAliasVan', persoon.get('firstObject'));
+    mandataris.set('status', {label: '', uri: ''});
+    mandataris.set('isBestuurlijkeAliasVan', await this.smartFetchPersoon(persoonURI));
     return mandataris;
   },
 
@@ -92,16 +156,16 @@ export default Mixin.create({
     const persoonURI = triples.find((t) => t.predicate === mandataris.rdfaBindings.isBestuurlijkeAliasVan);
 
     if (persoonURI) {
-      const persoon = await this.store.query('persoon',
-                                             {
-                                               filter: {
-                                                 ':uri:': persoonURI.object,
-                                                 'is-kandidaat-voor': { 'rechtstreekse-verkiezing': {'stelt-samen': {':uri:': this.bestuursorgaan.uri}}}
-                                               },
-                                               include: 'is-kandidaat-voor'
-                                             });
-      mandataris.set('isBestuurlijkeAliasVan', persoon.get('firstObject'));
+      mandataris.set('isBestuurlijkeAliasVan', await this.smartFetchPersoon(persoonURI.object));
     }
+
+    let statusUri = ((triples.find(t => t.predicate === mandataris.rdfaBindings.status)) || {}).object;
+    mandataris.set('status', {label: '', uri: ''});
+    if(statusUri){
+      let status  = this.mandatarisStatusCodes.find(c => c.uri == statusUri);
+      mandataris.set('status', status || {label: '', uri: ''});
+    }
+
     return mandataris;
   },
 

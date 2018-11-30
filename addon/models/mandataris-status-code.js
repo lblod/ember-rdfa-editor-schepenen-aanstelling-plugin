@@ -4,5 +4,4 @@ import attr from 'ember-data/attr';
 export default Model.extend({
   uri: attr(),
   label: attr()
-
 });
