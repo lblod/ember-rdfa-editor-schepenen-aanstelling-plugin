@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import layout from '../../templates/components/schepenen-aanstelling/output-rdfa';
 import { computed } from '@ember/object';
 import { rangordeValues } from '../../models/mandataris-to-create';
+import uuid from 'uuid/v4';
 
 export default Component.extend({
   layout,
@@ -11,6 +12,10 @@ export default Component.extend({
 
   verhinderdeMandatarissen: computed('sortedMandatarissen', function(){
     return this.sortedMandatarissen.filter(m => m.status.label.trim().toLowerCase() == 'verhinderd');
+  }),
+
+  hasVerhinderdeMandatarissen: computed('verhinderdeMandatarissen', function(){
+    return this.verhinderdeMandatarissen.length > 0;
   }),
 
   waarnemendMandatarissen: computed('sortedMandatarissen', function(){
@@ -31,4 +36,12 @@ export default Component.extend({
     }
     return rangordeValues.indexOf(a.rangorde.trim()) - rangordeValues.indexOf(b.rangorde.trim());
   },
+
+  artikelDrieUri: computed('', function(){
+    return `http://data.lblod.info/artikels/${uuid()}`;
+  }),
+
+  artikelVierUri: computed('', function(){
+    return `http://data.lblod.info/artikels/${uuid()}`;
+  })
 });
