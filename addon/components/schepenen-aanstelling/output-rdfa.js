@@ -11,7 +11,7 @@ export default Component.extend({
   }),
 
   verhinderdeMandatarissen: computed('sortedMandatarissen', function(){
-    return this.sortedMandatarissen.filter(m => m.status.label.trim().toLowerCase() == 'verhinderd');
+    return this.sortedMandatarissen.filter(m => m.status && m.status.label.trim().toLowerCase() == 'verhinderd');
   }),
 
   hasVerhinderdeMandatarissen: computed('verhinderdeMandatarissen', function(){
@@ -19,11 +19,11 @@ export default Component.extend({
   }),
 
   waarnemendMandatarissen: computed('sortedMandatarissen', function(){
-    return this.sortedMandatarissen.filter(m => m.status.label.trim().toLowerCase() == 'waarnemend');
+    return this.sortedMandatarissen.filter(m => m.status && m.status.label.trim().toLowerCase() == 'waarnemend');
   }),
 
   effectiefMandatarissen: computed('sortedMandatarissen', function(){
-    return this.sortedMandatarissen.filter(m => m.status.label.trim().toLowerCase() == 'effectief');
+    return this.sortedMandatarissen.filter(m => m.status && m.status.label.trim().toLowerCase() == 'effectief');
   }),
 
   rangordeSort(a,b){
