@@ -42,38 +42,29 @@ export default Mixin.create({
 
   async setCachedPersonen(){
     //a subset of peronen of interest
-    let personen = await this.store.query('persoon',
-                     {
-                       filter: {
-                         'is-kandidaat-voor': {
-                           'rechtstreekse-verkiezing': {
-                             'stelt-samen': {
-                               ':uri:': this.bestuursorgaan.uri
-                             }
-                           }
-                         },
-                         'verkiezingsresultaten': {
-                           'gevolg': {
-                             ':uri:': this.verkozenGevolgUri
-                           },
-                           'is-resultaat-voor': {
-                             'rechtstreekse-verkiezing': {
-                               'stelt-samen': {
-                                 ':uri:': this.bestuursorgaan.uri
-                               }
-                             }
-                           }
-                         }
-                       },
-                       include: 'geboorte',
-                       page: { size: 1000 },
-                       sort:'gebruikte-voornaam'
-                     });
-    this.set('cachedPersonen', personen.toArray() || A());
+    let resultaten = await this.store.query('verkiezingsresultaat',
+                                            {
+                                              filter: {
+                                                'is-resultaat-voor' : {
+                                                  'rechtstreekse-verkiezing': {
+                                                    'stelt-samen': {
+                                                      ':uri:': this.bestuursorgaan.uri
+                                                    }
+                                                  }
+                                                },
+                                                'gevolg': {
+                                                  ':uri:': this.verkozenGevolgUri
+                                                }
+                                              },
+                                              include: 'is-resultaat-van.geboorte',
+                                              page: { size: 1000 },
+                                              sort:'is-resultaat-van.gebruikte-voornaam'
+                                            });
+    this.set('cachedPersonen', resultaten.map((res) => res.isResultaatVan) || A());
   },
 
   async smartFetchPersoon(subjectUri){
-    let persoon = this.cachedPersonen.find(p => p.uri == subjectUri);
+    let persoon = this.cachedPersonen.find(p => p.get('uri') == subjectUri);
     if(persoon)
       return persoon;
     //if not existant try to create it on based on information in triples
