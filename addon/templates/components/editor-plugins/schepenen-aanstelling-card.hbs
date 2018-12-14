@@ -1,4 +1,4 @@
-<div class="modal-dialog__header">
+ <div class="modal-dialog__header">
   <div class="grid">
     <div class="col--10-12">
       {{#if loadData.isRunning}}
@@ -61,6 +61,13 @@
               <i class="fa fa-rotate-right"></i>Importeer gemeenteraadsleden opnieuw uit vorige agendapunten
             {{/wu-link-button}}
           </div>
+          <div class="col--7-12">
+            <label class="checkbox checkbox--block">
+              {{input class="checkbox__toggle" type="checkbox" checked=nieuweStijl click=(action "toggleNieuweStijl") }}
+              <span></span>
+              <strong>Voeg toe in nieuwe stijl</strong>
+            </label>
+          </div>
         {{/if}}
       </div>
     </div>
@@ -72,7 +79,7 @@
         bestuurseenheid=bestuurseenheid
         schepenMandaat=schepenMandaat
       }}
-      {{schepenen-aanstelling/output-rdfa id=outputId class="u-hidden" mandatarissen=mandatarissen}}
+      {{schepenen-aanstelling/output-rdfa id=outputId class="u-hidden" mandatarissen=mandatarissen nieuweStijl=nieuweStijl}}
     {{/m.content}}
     <div class="modal-dialog__footer">
       {{#wu-button-group}}

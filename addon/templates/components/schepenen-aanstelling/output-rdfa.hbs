@@ -1,70 +1,117 @@
-<div property="eli:has_part" resource={{artikelDrieUri}} typeof="besluit:Artikel">
-  <span property="eli:number">Artikel 3</span>
-  <meta property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD">
-  <div property="prov:value">Volgende voorgedragen kandidaat-schepenen verkozen te verklaren in de rangorde van de gezamenlijke akte van voordracht van de kandidaat-schepenen en akte te nemen van hun eedaflegging:
-
-  <table class="data-table data-table--lined data-table--zebra data-table--tight">
-    <thead>
-      <tr>
-        <th>Rangorde</th>
-        <th>Officiële naam</th>
-        <th>Status</th>
-        <th>Begindatum mandaat</th>
-        <th>Einddatum mandaat</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each sortedMandatarissen as |mandataris|}}
-        <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
-          <td>
-            <span property="mandaat:rangorde" content="{{mandataris.rangorde}}">
-              {{mandataris.rangorde}}
-            </span>
-          </td>
-          <td>
-            {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
-              {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
-            {{/rdfa/ctx-linked-resource}}
-          </td>
-          <td>
-            <span property={{mandataris.rdfaBindings.status}} resource={{mandataris.status.uri}}>
-              <span property="skos:prefLabel">{{mandataris.status.label}}</span>
-            </span>
-          </td>
-          <td>
-            <span property="mandaat:start" datatype="xsd:date" content={{moment-format mandataris.start 'YYYY-MM-DD'}}>
-              {{moment-format mandataris.start 'LL'}}
-            </span>
-          </td>
-          <td>
-            <span property="mandaat:einde" datatype="xsd:date" content={{moment-format mandataris.einde 'YYYY-MM-DD'}}>
-              {{moment-format mandataris.einde 'LL'}}
-            </span>
-          </td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-  </div>
-</div>
-
-{{#if hasVerhinderdeMandatarissen}}
-  <div property="eli:has_part" resource={{artikelVierUri}} typeof="besluit:Artikel">
-    <span property="eli:number">Artikel 4</span>
+{{#if nieuweStijl}}
+  <div property="eli:has_part" resource={{artikelDrieUri}} typeof="besluit:Artikel">
+    <span property="eli:number">Artikel 3</span>
     <meta property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD">
-    <div property="prov:value">Akte te nemen van de verhindering van volgende schepenen:
+    <div property="prov:value">Volgende voorgedragen kandidaat-schepenen verkozen te verklaren in de rangorde van de gezamenlijke akte van voordracht van de kandidaat-schepenen en akte te nemen van hun eedaflegging:
+
+    <table class="data-table data-table--lined data-table--zebra data-table--tight">
+      <thead>
+        <tr>
+          <th>Rangorde</th>
+          <th>Officiële naam</th>
+          <th>Status</th>
+          <th>Begindatum mandaat</th>
+          <th>Einddatum mandaat</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each sortedMandatarissen as |mandataris|}}
+          <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
+            <td>
+              <span property="mandaat:rangorde" content="{{mandataris.rangorde}}">
+                {{mandataris.rangorde}}
+              </span>
+            </td>
+            <td>
+              {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
+                {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
+              {{/rdfa/ctx-linked-resource}}
+            </td>
+            <td>
+              <span property={{mandataris.rdfaBindings.status}} resource={{mandataris.status.uri}}>
+                <span property="skos:prefLabel">{{mandataris.status.label}}</span>
+              </span>
+            </td>
+            <td>
+              <span property="mandaat:start" datatype="xsd:date" content={{moment-format mandataris.start 'YYYY-MM-DD'}}>
+                {{moment-format mandataris.start 'LL'}}
+              </span>
+            </td>
+            <td>
+              <span property="mandaat:einde" datatype="xsd:date" content={{moment-format mandataris.einde 'YYYY-MM-DD'}}>
+                {{moment-format mandataris.einde 'LL'}}
+              </span>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  {{#if hasVerhinderdeMandatarissen}}
+    <div property="eli:has_part" resource={{artikelVierUri}} typeof="besluit:Artikel">
+      <span property="eli:number">Artikel 4</span>
+      <meta property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD">
+      <div property="prov:value">Akte te nemen van de verhindering van volgende schepenen:
+
+        <table class="data-table data-table--lined data-table--zebra data-table--tight">
+          <thead>
+            <tr>
+              <th>Officiële naam</th>
+              <th>Status</th>
+              <th>Begindatum verhindering</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each verhinderdeMandatarissen as |mandataris|}}
+              <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
+                <td>
+                  {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
+                    {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
+                  {{/rdfa/ctx-linked-resource}}
+                </td>
+                <td>
+                  <span property={{mandataris.rdfaBindings.status}} resource={{mandataris.status.uri}}>
+                    <span property="skos:prefLabel">{{mandataris.status.label}}</span>
+                  </span>
+                </td>
+                <td>
+                  <span property="mandaat:start" datatype="xsd:date" content={{moment-format mandataris.start 'YYYY-MM-DD'}}>
+                    {{moment-format mandataris.start 'LL'}}
+                  </span>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {{/if}}
+{{else}}
+  <div property="eli:has_part" resource={{artikelDrieUri}} typeof="besluit:Artikel">
+    <span property="eli:number">Artikel 3</span>
+    <meta property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD">
+    <div property="prov:value">Volgende voorgedragen kandidaat-schepenen verkozen te verklaren in de rangorde van de gezamenlijke akte van voordracht van de kandidaat-schepenen en akte te nemen van hun eedaflegging:
 
       <table class="data-table data-table--lined data-table--zebra data-table--tight">
         <thead>
           <tr>
+            <th>Rangorde</th>
             <th>Officiële naam</th>
             <th>Status</th>
-            <th>Begindatum verhindering</th>
+            <th>Begindatum mandaat</th>
+            <th>Einddatum mandaat</th>
           </tr>
         </thead>
         <tbody>
-          {{#each verhinderdeMandatarissen as |mandataris|}}
+          {{#each sortedMandatarissen as |mandataris|}}
             <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
+              <td>
+                <span property="mandaat:rangorde" content="{{mandataris.rangorde}}">
+                  {{mandataris.rangorde}}
+                </span>
+              </td>
               <td>
                 {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
                   {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
@@ -80,10 +127,55 @@
                   {{moment-format mandataris.start 'LL'}}
                 </span>
               </td>
+              <td>
+                <span property="mandaat:einde" datatype="xsd:date" content={{moment-format mandataris.einde 'YYYY-MM-DD'}}>
+                  {{moment-format mandataris.einde 'LL'}}
+                </span>
+              </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
     </div>
   </div>
+
+  {{#if hasVerhinderdeMandatarissen}}
+    <div property="eli:has_part" resource={{artikelVierUri}} typeof="besluit:Artikel">
+      <span property="eli:number">Artikel 4</span>
+      <meta property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD">
+      <div property="prov:value">Akte te nemen van de verhindering van volgende schepenen:
+
+        <table class="data-table data-table--lined data-table--zebra data-table--tight">
+          <thead>
+            <tr>
+              <th>Officiële naam</th>
+              <th>Status</th>
+              <th>Begindatum verhindering</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each verhinderdeMandatarissen as |mandataris|}}
+              <tr property="ext:bekrachtigtAanstellingVan" resource={{mandataris.uri}} typeof={{mandataris.rdfaBindings.class}}>
+                <td>
+                  {{#rdfa/ctx-linked-resource resource=mandataris p="isBestuurlijkeAliasVan" as |model persoon|}}
+                    {{persoon.prop resource=model p="gebruikteVoornaam"}} {{persoon.prop resource=model p="achternaam"}}
+                  {{/rdfa/ctx-linked-resource}}
+                </td>
+                <td>
+                  <span property={{mandataris.rdfaBindings.status}} resource={{mandataris.status.uri}}>
+                    <span property="skos:prefLabel">{{mandataris.status.label}}</span>
+                  </span>
+                </td>
+                <td>
+                  <span property="mandaat:start" datatype="xsd:date" content={{moment-format mandataris.start 'YYYY-MM-DD'}}>
+                    {{moment-format mandataris.start 'LL'}}
+                  </span>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {{/if}}
 {{/if}}

@@ -121,6 +121,9 @@ export default Component.extend(SerializationHelper, {
     },
     togglePopup(){
        this.toggleProperty('popup');
+    },
+    toggleNieuweStijl(){
+      this.toggleProperty('nieuweStijl');
     }
   }
 });
