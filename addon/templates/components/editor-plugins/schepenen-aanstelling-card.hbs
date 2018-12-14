@@ -61,13 +61,6 @@
               <i class="fa fa-rotate-right"></i>Importeer gemeenteraadsleden opnieuw uit vorige agendapunten
             {{/wu-link-button}}
           </div>
-          <div class="col--7-12">
-            <label class="checkbox checkbox--block">
-              {{input class="checkbox__toggle" type="checkbox" checked=nieuweStijl click=(action "toggleNieuweStijl") }}
-              <span></span>
-              <strong>Voeg toe in nieuwe stijl</strong>
-            </label>
-          </div>
         {{/if}}
       </div>
     </div>
@@ -83,6 +76,11 @@
     {{/m.content}}
     <div class="modal-dialog__footer">
       {{#wu-button-group}}
+        <label class="checkbox checkbox--block u-spacer--bottom--small">
+          {{input class="checkbox__toggle" type="checkbox" checked=nieuweStijl click=(action "toggleNieuweStijl") }}
+          <span></span>
+          <strong>Voeg toe in nieuwe stijl</strong>
+        </label>
         {{wu-button label="Voeg tabel in" class="button button--narrow" onClick=(action 'insert')}}
         {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
       {{/wu-button-group}}
