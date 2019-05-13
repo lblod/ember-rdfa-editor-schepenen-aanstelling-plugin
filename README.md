@@ -25,7 +25,7 @@ Contributing
 ### Installation
 
 * `git clone <repository-url>`
-* `cd ember-rdfa-editor-fractievorming-plugin`
+* `cd ember-rdfa-editor-schepenen-aanstelling-plugin`
 * `npm install`
 
 ### Linting
